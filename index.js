@@ -12,10 +12,7 @@ export class Widget {
     constructor({ apiKey = '', position = 'bottom-right', button = false} = {}) {
         esriConfig.apiKey = apiKey;
         this.position = this.getPosition(position);
-        this.classPosition = position;
         this.button = button;
-        this.view = {};
-        this.map = {};
         this.graphicsLayer = {};
         this.open = false;
         this.initialise();
@@ -208,6 +205,7 @@ export class Widget {
         const map = new Map({
             basemap: "arcgis-navigation",
         });
+
         this.map = map;
 
         const view = new MapView({
@@ -225,20 +223,12 @@ export class Widget {
 
         view.ui.add(homeBtn, "top-right");
 
-        view.on("click", (event) => {
-            this.getClickedObject(event)
+        this.view.on("click", (event)=> {
+            this.coords = [event.mapPoint.latitude, event.mapPoint.longitude];
+            console.log([event.mapPoint.latitude, event.mapPoint.longitude])
         });
     }
 
-    async eventHandler() {
-        return window.addEventListener('load', async () => {
-            return this.view.on("click", async (event) => {
-                return await this.getClickedObject(event)
-            })
-
-        })
-    }
-    
     toggleOpen() {
         this.open = !this.open;
         if(this.open) {
@@ -253,19 +243,31 @@ export class Widget {
         }
     };
 
-    async getClickedObject(event){
+/*      async getClickedObject(event){
         try{
             const coords = [event.mapPoint.latitude, event.mapPoint.longitude];
+
             const obj = await this.fetchByGeo(coords);
             if(obj===undefined){
                 console.info(`Cannot find ${coords}`);
-                return
+                return `Cannot find ${coords}`;
             }
-            console.log(obj[0]) 
+            //console.log(obj[0]) 
             return obj[0]
         }catch(err){
             console.error(err)
         }
+    } */
+
+    async getLastAddress(){
+         if(this.address){
+            return this.address;
+        }
+        return 'No addresses yet'
+    }
+
+    async getCoords(){
+        return this.coords
     }
 
     submit(event) {
@@ -274,7 +276,7 @@ export class Widget {
         event.srcElement.querySelector('#point').value = '';
         if(direction.startsWith('[')){
             direction = JSON.parse(direction);
-            this.goToPosition(direction);
+            this.fetchByGeo(direction)
         }else {
             this.fetchByDescription(direction)
         }
@@ -284,34 +286,44 @@ export class Widget {
         try {
             const res = await fetch(`https://search.xygo.com/search/findDescription?q=${direction}`);
             const json = await res.json();
-            const ubication = Object.values(json.Resultados[0])[10];
+            this.address = Object.values(json.Resultados[0]);
+            const ubication = this.address[10];
             const {lat, lon} = ubication;
-            this.goToPosition([lon, lat])
+            this.createPoint([lon, lat])
         } catch (err) {
             console.error(err.message);
         }
     };
 
     async fetchByGeo(coords) {
-        try {
+        try{
             const res = await fetch(`https://search.xygo.com/search/findGeoInversa?lat=${coords[0]}&lon=${coords[1]}`);
             const json = await res.json();
-            return json;
-        } catch (err) {
+            this.address = Object.values(json[0]);
+            const ubication = this.address[10];
+            const {lat, lon} = ubication;
+            this.createPoint([lon, lat]);
+        }catch (err) {
+            console.error(err)
+            this.address = undefined;
+            this.createPoint([coords[1], coords[0]]);
         }
     };
 
-    goToPosition(coordinates){
-        let point;
+    createPoint(coordinates){
+        const point = new Point(coordinates);
+        this.point = point;
+        this.goToPosition();
+    }
+
+    goToPosition(){
 
         if(Object.keys(this.graphicsLayer).length !== 0){
             this.graphicsLayer.removeAll();
         }
 
-        point = new Point(coordinates);
-
         this.view.goTo({
-            target: point,
+            target: this.point,
             zoom: 14
         }, {duration: 1000})
         .catch(function(error) {
@@ -335,7 +347,7 @@ export class Widget {
         };
 
         const pointGraphic = new Graphic({
-            geometry: point,
+            geometry: this.point,
             symbol: simpleMarkerSymbol
         });
 
