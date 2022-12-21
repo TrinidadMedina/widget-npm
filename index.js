@@ -8,10 +8,9 @@ import Home from "@arcgis/core/widgets/Home.js";
 import mapImage from './assets/map.png';
 import crossImage from './assets/cross.svg';
 
-esriConfig.apiKey = "AAPK1fc0b8b440dd42aebf2711e64c01ef423EfO0GY5j4d50HuADKIms_tAZotMHGGnOwjjim1Ki3ttTwQ1RnRkW5Z9UBR0HTLi";
-
 export class Widget {   
-    constructor({ position = 'bottom-right', button = true} = {}) {
+    constructor({ apiKey = '', position = 'bottom-right', button = false} = {}) {
+        esriConfig.apiKey = apiKey;
         this.position = this.getPosition(position);
         this.classPosition = position;
         this.button = button;
