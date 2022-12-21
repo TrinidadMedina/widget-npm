@@ -1,13 +1,3 @@
-/* import Map from "https://js.arcgis.com/4.25/@arcgis/core/Map.js";
-import MapView from "https://js.arcgis.com/4.25/@arcgis/core/views/MapView.js";
-import esriConfig from "https://js.arcgis.com/4.25/@arcgis/core/config.js";
-import Point from "https://js.arcgis.com/4.25/@arcgis/core/geometry/Point.js";
-import Graphic from "https://js.arcgis.com/4.25/@arcgis/core/Graphic.js";
-import GraphicsLayer from "https://js.arcgis.com/4.25/@arcgis/core/layers/GraphicsLayer.js";
-import Home from "https://js.arcgis.com/4.25/@arcgis/core/widgets/Home.js";
-import mapImage from './assets/map.png';
-import crossImage from './assets/cross.svg'; */
-
 import Map from "@arcgis/core/Map.js";
 import MapView from "@arcgis/core/views/MapView.js";
 import esriConfig from "@arcgis/core/config.js";
