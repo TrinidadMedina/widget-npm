@@ -259,7 +259,7 @@ export class Widget {
             const coords = [event.mapPoint.latitude, event.mapPoint.longitude];
             const obj = await this.fetchByGeo(coords);
             if(obj===undefined){
-                console.info(`Can not find ${coords}`);
+                console.info(`Cannot find ${coords}`);
                 return
             }
             console.log(obj[0]) 
