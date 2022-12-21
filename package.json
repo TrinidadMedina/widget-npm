@@ -1,0 +1,24 @@
+{
+  "name": "widget-xygo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TrinidadMedina/widget-npm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TrinidadMedina/widget-npm/issues"
+  },
+  "homepage": "https://github.com/TrinidadMedina/widget-npm#readme",
+  "dependencies": {
+    "@arcgis/core": "^4.25.5"
+  }
+}
