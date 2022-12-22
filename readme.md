@@ -32,7 +32,7 @@ const coordinates = await widget.getCoords()
 ```
 
 ## Usage    
-<img src="assets/widget.png" alt="widget" style="width:300px;"/>    
+<img src="assets/widget.png" alt="widget" style="width:150px;"/>    
 
 ### Search by address    
 Enter an address into the search box and press the Enter key or the Submit button
