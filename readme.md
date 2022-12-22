@@ -59,3 +59,6 @@ Enter coordinates into the search box with the following format: [latitude, long
 
 Example:
 [-33.44356568, -70.62951751]
+
+## Try it
+Go to [this website](https://widget-compilado.vercel.app) and test the widget by looking for addresses!

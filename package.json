@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/TrinidadMedina/widget-npm.git"
   },
-  "keywords": [],
+  "keywords": ["widget", "map", "xygo" ],
   "author": "",
   "license": "ISC",
   "bugs": {
