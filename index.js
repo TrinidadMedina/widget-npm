@@ -205,7 +205,6 @@ export class Widget {
         const map = new Map({
             basemap: "arcgis-navigation",
         });
-
         this.map = map;
 
         const view = new MapView({
@@ -214,7 +213,6 @@ export class Widget {
             center: [-70.619641, -33.486599],    
             zoom: 6
         }); 
-
         this.view = view;
 
         const homeBtn = new Home({
@@ -222,13 +220,8 @@ export class Widget {
         });
 
         view.ui.add(homeBtn, "top-right");
-
-        this.view.on("click", (event)=> {
-            this.coords = [event.mapPoint.latitude, event.mapPoint.longitude];
-            console.log([event.mapPoint.latitude, event.mapPoint.longitude])
-        });
-    }
-
+    };
+    
     toggleOpen() {
         this.open = !this.open;
         if(this.open) {
@@ -242,33 +235,6 @@ export class Widget {
             this.messageContainer.classList.add('hidden');
         }
     };
-
-/*      async getClickedObject(event){
-        try{
-            const coords = [event.mapPoint.latitude, event.mapPoint.longitude];
-
-            const obj = await this.fetchByGeo(coords);
-            if(obj===undefined){
-                console.info(`Cannot find ${coords}`);
-                return `Cannot find ${coords}`;
-            }
-            //console.log(obj[0]) 
-            return obj[0]
-        }catch(err){
-            console.error(err)
-        }
-    } */
-
-    async getLastAddress(){
-         if(this.address){
-            return this.address;
-        }
-        return 'No addresses yet'
-    }
-
-    async getCoords(){
-        return this.coords
-    }
 
     submit(event) {
         event.preventDefault();
@@ -286,8 +252,7 @@ export class Widget {
         try {
             const res = await fetch(`https://search.xygo.com/search/findDescription?q=${direction}`);
             const json = await res.json();
-            this.address = Object.values(json.Resultados[0]);
-            const ubication = this.address[10];
+            const ubication = Object.values(json.Resultados[0])[10]
             const {lat, lon} = ubication;
             this.createPoint([lon, lat])
         } catch (err) {
@@ -299,13 +264,11 @@ export class Widget {
         try{
             const res = await fetch(`https://search.xygo.com/search/findGeoInversa?lat=${coords[0]}&lon=${coords[1]}`);
             const json = await res.json();
-            this.address = Object.values(json[0]);
-            const ubication = this.address[10];
+            const ubication = Object.values(json[0])[10]
             const {lat, lon} = ubication;
             this.createPoint([lon, lat]);
         }catch (err) {
             console.error(err)
-            this.address = undefined;
             this.createPoint([coords[1], coords[0]]);
         }
     };
@@ -314,10 +277,9 @@ export class Widget {
         const point = new Point(coordinates);
         this.point = point;
         this.goToPosition();
-    }
+    };
 
     goToPosition(){
-
         if(Object.keys(this.graphicsLayer).length !== 0){
             this.graphicsLayer.removeAll();
         }
@@ -353,6 +315,16 @@ export class Widget {
 
         this.pointGraphic = pointGraphic;
         graphicsLayer.add(pointGraphic);            
+    };
+
+    async getCoords() {
+        let view = this.view
+        return new Promise(function(resolve, reject){
+            view.on('click', function(e){
+                const coords = [e.mapPoint.latitude, e.mapPoint.longitude];
+                resolve(coords);
+           });
+       });
     };
 };
 
