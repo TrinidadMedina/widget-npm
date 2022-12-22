@@ -130,7 +130,6 @@ export class Widget {
             background-color: #ACB0F3;
         }
         .message-container .content {
-            margin: 10px 10px ;
             border: 1px solid #dbdbdb;
             padding: 6px;
             display: flex;
