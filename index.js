@@ -252,8 +252,9 @@ export class Widget {
             const res = await fetch(`https://search.xygo.com/search/findDescription?q=${direction}`);
             const json = await res.json();
             const ubication = Object.values(json.Resultados[0])[10]
+            console.log(ubication);
             const {lat, lon} = ubication;
-            this.createPoint([lon, lat])
+            this.createPoint([lon, lat]);
         } catch (err) {
             console.error(err.message);
         }
