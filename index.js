@@ -245,11 +245,11 @@ export class Widget {
         }else {
             this.fetchByDescription(direction)
         }
-    } 
+    }; 
 
     async fetchByDescription(direction) {
         try {
-            const res = await fetch(`https://search.xygo.com/search/findDescription?q=${direction}`);
+            const res = await fetch(`https://search.xygo.com/search/findTextoLibre?codPais?56&q=${direction}`);
             const json = await res.json();
             console.log(json.Resultados[0])
             const ubication = Object.values(json.Resultados[0])[10]
